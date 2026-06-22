@@ -162,13 +162,13 @@ def _scope_rank(meter):
 
 
 def _fetch_service(sname):
-    base = "https://prices.azure.com/api/retail/prices"
+    # IMPORTANTE: o $filter precisa ficar LITERAL na URL. Usar urlencode o
+    # transforma em %24filter e a API do Azure devolve 0 itens. Por isso
+    # montamos a URL manualmente e codificamos apenas o VALOR do filtro.
     flt = "serviceName eq '{}' and priceType eq 'Consumption'".format(sname.replace("'", "''"))
-    url = base + "?" + urllib.parse.urlencode({
-        "api-version": "2023-01-01-preview",
-        "currencyCode": "USD",
-        "$filter": flt,
-    })
+    url = ("https://prices.azure.com/api/retail/prices"
+           "?api-version=2023-01-01-preview"
+           "&$filter=" + urllib.parse.quote(flt))
     items, pages = [], 0
     while url and pages < 60:
         data = http_get(url).json()
