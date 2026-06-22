@@ -1,0 +1,56 @@
+{
+  "asOf": "2026-06-22",
+  "generatedBy": "valores iniciais (jun/2026)",
+  "currency": "USD",
+  "creditPrice": 0.01,
+  "capacityPack": { "usd": 200, "credits": 25000 },
+  "sreAlwaysOn": 4,
+  "m365": { "enterprise": 30, "business": 18 },
+  "models": [
+    { "id": "gpt55",   "name": "GPT-5.5",         "in": 5.00,  "cached": 0.50,  "out": 30.00 },
+    { "id": "gpt54",   "name": "GPT-5.4",         "in": 2.50,  "cached": 0.25,  "out": 15.00 },
+    { "id": "gpt54m",  "name": "GPT-5.4 mini",    "in": 0.75,  "cached": 0.08,  "out": 4.50 },
+    { "id": "gpt54n",  "name": "GPT-5.4 nano",    "in": 0.20,  "cached": 0.02,  "out": 1.25 },
+    { "id": "gpt5",    "name": "GPT-5",           "in": 1.25,  "cached": 0.125, "out": 10.00 },
+    { "id": "gpt5m",   "name": "GPT-5 mini",      "in": 0.25,  "cached": 0.025, "out": 2.00 },
+    { "id": "gpt5n",   "name": "GPT-5 nano",      "in": 0.05,  "cached": 0.005, "out": 0.40 },
+    { "id": "gpt41",   "name": "GPT-4.1",         "in": 2.00,  "cached": 0.50,  "out": 8.00 },
+    { "id": "gpt41m",  "name": "GPT-4.1 mini",    "in": 0.40,  "cached": 0.10,  "out": 1.60 },
+    { "id": "gpt41n",  "name": "GPT-4.1 nano",    "in": 0.10,  "cached": 0.025, "out": 0.40 },
+    { "id": "gpt4o",   "name": "GPT-4o",          "in": 2.50,  "cached": 1.25,  "out": 10.00 },
+    { "id": "gpt4om",  "name": "GPT-4o mini",     "in": 0.15,  "cached": 0.075, "out": 0.60 },
+    { "id": "o3",      "name": "o3",              "in": 2.00,  "cached": 0.50,  "out": 8.00 },
+    { "id": "o4m",     "name": "o4-mini",         "in": 1.10,  "cached": 0.275, "out": 4.40 },
+    { "id": "o3m",     "name": "o3-mini",         "in": 1.10,  "cached": 0.55,  "out": 4.40 },
+    { "id": "o1",      "name": "o1",              "in": 15.00, "cached": 7.50,  "out": 60.00 },
+    { "id": "maidsr1", "name": "MAI-DS-R1",       "in": 1.35,  "cached": 0.135, "out": 5.40 },
+    { "id": "dsv32",   "name": "DeepSeek V3.2",   "in": 0.27,  "cached": 0.027, "out": 1.10 },
+    { "id": "dsr1",    "name": "DeepSeek R1",     "in": 0.55,  "cached": 0.14,  "out": 2.19 },
+    { "id": "llama8b", "name": "Llama 3.1 8B",    "in": 0.02,  "cached": 0.02,  "out": 0.05 },
+    { "id": "mists",   "name": "Mistral Small 3.1","in": 0.10, "cached": 0.10,  "out": 0.30 },
+    { "id": "phi4",    "name": "Phi-4",           "in": 0.125, "cached": 0.125, "out": 0.50 },
+    { "id": "phi4m",   "name": "Phi-4 mini",      "in": 0.075, "cached": 0.075, "out": 0.30 }
+  ],
+  "aauRates": {
+    "opus46": { "in": 100, "out": 500, "cr": 10,  "cw": 125 },
+    "gpt53":  { "in": 35,  "out": 280, "cr": 3.5, "cw": 0 },
+    "gpt52":  { "in": 35,  "out": 280, "cr": 3.5, "cw": 0 }
+  },
+  "studioFeatures": [
+    { "id": "classic",   "credit": 1 },
+    { "id": "genative",  "credit": 2 },
+    { "id": "action",    "credit": 5 },
+    { "id": "grounding", "credit": 10 },
+    { "id": "flow",      "credit": 13 },
+    { "id": "toolb",     "credit": 1 },
+    { "id": "tools",     "credit": 15 },
+    { "id": "toolp",     "credit": 100 },
+    { "id": "content",   "credit": 8 }
+  ],
+  "meta": {
+    "tokens":  { "status": "seed", "source": "https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/microsoft/" },
+    "aau":     { "status": "seed", "source": "https://learn.microsoft.com/en-us/azure/sre-agent/pricing-billing" },
+    "credits": { "status": "seed", "source": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/requirements-messages-management" },
+    "m365":    { "status": "seed", "source": "https://www.microsoft.com/en-us/microsoft-365-copilot/pricing" }
+  }
+}

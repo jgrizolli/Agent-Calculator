@@ -1,0 +1,42 @@
+name: Atualizar precos (mensal)
+
+# Quando rodar:
+on:
+  schedule:
+    # Dia 1 de cada mes, 06:00 UTC (= 03:00 no horario de Brasilia).
+    - cron: "0 6 1 * *"
+  workflow_dispatch: {}   # tambem permite rodar manualmente pelo botao "Run workflow"
+
+# Permite que o robo faca commit do prices.json atualizado:
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: pip install -r scripts/requirements.txt
+
+      - name: Gerar prices.json
+        run: python scripts/update_prices.py
+
+      - name: Commit se houver mudanca
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add prices.json
+          if git diff --staged --quiet; then
+            echo "Nenhuma mudanca nos precos. Nada a commitar."
+          else
+            git commit -m "chore: atualiza prices.json ($(date -u +%Y-%m-%d))"
+            git push
+          fi

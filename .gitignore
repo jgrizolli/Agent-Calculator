@@ -1,0 +1,18 @@
+# Python (gerado ao rodar o script de atualização localmente)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Sistema operacional / editores
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/
+
+# Arquivos temporários
+*.log
+*.tmp
