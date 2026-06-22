@@ -178,38 +178,47 @@ def _fetch_service(sname):
     return items
 
 
+def _is_token_meter(it):
+    """Reconhece medidores de token (unidade '1K', '1M', 'Tokens'...),
+    excluindo cobranças por hora/imagem."""
+    uom = (it.get("unitOfMeasure") or "").lower()
+    if "hour" in uom or "image" in uom or "/hr" in uom:
+        return False
+    return ("token" in uom or "1k" in uom or "1m" in uom
+            or "1,000" in uom or "1000" in uom)
+
+
 def fetch_tokens():
-    items, used = [], []
+    chosen, used, total = [], [], 0
     for sname in SERVICE_CANDIDATES:
         try:
             got = _fetch_service(sname)
-        except Exception:
+        except Exception as exc:
+            used.append("{}: erro {}".format(sname, exc))
             continue
-        toks = [it for it in got if "token" in (it.get("unitOfMeasure") or "").lower()]
+        toks = [it for it in got
+                if _is_token_meter(it) and _match_model_id(it.get("meterName") or "")]
+        used.append("{}: {} itens, {} token-modelo".format(sname, len(got), len(toks)))
         if toks:
-            items = got
-            used.append("{} ({} token meters)".format(sname, len(toks)))
-            break  # achamos onde estao os tokens; nao precisa dos outros
+            chosen, total = toks, len(got)
+            break  # achamos onde estao os tokens
 
     # mid -> comp -> (rank, price): mantem o de maior prioridade (global)
     ranked = {}
-    for it in items:
-        uom = (it.get("unitOfMeasure") or "").lower()
-        if "token" not in uom:
-            continue
+    for it in chosen:
         meter = it.get("meterName") or ""
         mid = _match_model_id(meter)
         if not mid:
             continue
         comp = _component(meter)
-        per1m = round(_per_million(it.get("retailPrice") or 0, uom), 4)
+        per1m = round(_per_million(it.get("retailPrice") or 0, it.get("unitOfMeasure")), 4)
         rank = _scope_rank(meter)
         cur = ranked.setdefault(mid, {}).get(comp)
         if cur is None or rank > cur[0]:
             ranked[mid][comp] = (rank, per1m)
 
     found = {mid: {c: v[1] for c, v in comps.items()} for mid, comps in ranked.items()}
-    return found, len(items), used
+    return found, total, used
 
 
 # ---------------------------------------------------------------------------
