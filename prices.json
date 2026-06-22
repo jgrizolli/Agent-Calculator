@@ -238,6 +238,7 @@
       "status": "fallback",
       "matched": 0,
       "meters": 0,
+      "services": [],
       "source": "https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/microsoft/",
       "asOf": "2026-06-22"
     },
