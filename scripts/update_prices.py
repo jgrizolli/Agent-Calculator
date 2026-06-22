@@ -145,22 +145,54 @@ def _match_model_id(meter):
     return None
 
 
-def fetch_tokens():
+# Nomes de servico candidatos onde os precos de token podem estar.
+# A Microsoft ja hospedou os medidores do Azure OpenAI sob nomes diferentes,
+# entao tentamos varios e usamos o primeiro que retornar medidores de token.
+SERVICE_CANDIDATES = ["Azure OpenAI", "Cognitive Services", "Azure AI Foundry"]
+
+
+def _scope_rank(meter):
+    """Prioriza precos 'Global' sobre 'Regional'/'Data Zone'."""
+    m = meter.lower()
+    if "glbl" in m or "global" in m:
+        return 2
+    if "regional" in m or "data zone" in m or "-dz" in m or " dz" in m:
+        return 0
+    return 1
+
+
+def _fetch_service(sname):
     base = "https://prices.azure.com/api/retail/prices"
-    flt = "serviceName eq 'Azure OpenAI' and priceType eq 'Consumption'"
+    flt = "serviceName eq '{}' and priceType eq 'Consumption'".format(sname.replace("'", "''"))
     url = base + "?" + urllib.parse.urlencode({
         "api-version": "2023-01-01-preview",
         "currencyCode": "USD",
         "$filter": flt,
     })
     items, pages = [], 0
-    while url and pages < 30:
+    while url and pages < 60:
         data = http_get(url).json()
         items.extend(data.get("Items", []))
         url = data.get("NextPageLink")
         pages += 1
+    return items
 
-    found = {}  # id -> {in,cached,out}
+
+def fetch_tokens():
+    items, used = [], []
+    for sname in SERVICE_CANDIDATES:
+        try:
+            got = _fetch_service(sname)
+        except Exception:
+            continue
+        toks = [it for it in got if "token" in (it.get("unitOfMeasure") or "").lower()]
+        if toks:
+            items = got
+            used.append("{} ({} token meters)".format(sname, len(toks)))
+            break  # achamos onde estao os tokens; nao precisa dos outros
+
+    # mid -> comp -> (rank, price): mantem o de maior prioridade (global)
+    ranked = {}
     for it in items:
         uom = (it.get("unitOfMeasure") or "").lower()
         if "token" not in uom:
@@ -171,9 +203,13 @@ def fetch_tokens():
             continue
         comp = _component(meter)
         per1m = round(_per_million(it.get("retailPrice") or 0, uom), 4)
-        found.setdefault(mid, {})[comp] = per1m
+        rank = _scope_rank(meter)
+        cur = ranked.setdefault(mid, {}).get(comp)
+        if cur is None or rank > cur[0]:
+            ranked[mid][comp] = (rank, per1m)
 
-    return found, len(items)
+    found = {mid: {c: v[1] for c, v in comps.items()} for mid, comps in ranked.items()}
+    return found, len(items), used
 
 
 # ---------------------------------------------------------------------------
@@ -263,7 +299,7 @@ def main():
 
     # 1) tokens
     try:
-        found, meters = fetch_tokens()
+        found, meters, used = fetch_tokens()
         applied = 0
         for m in out["models"]:
             f = found.get(m["id"])
@@ -275,7 +311,7 @@ def main():
             applied += 1
         meta["tokens"] = {
             "status": "live" if applied else "fallback",
-            "matched": applied, "meters": meters,
+            "matched": applied, "meters": meters, "services": used,
             "source": SRC_TOKENS, "asOf": TODAY,
         }
     except Exception as exc:
