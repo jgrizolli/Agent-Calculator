@@ -238,7 +238,11 @@
       "status": "fallback",
       "matched": 0,
       "meters": 0,
-      "services": [],
+      "services": [
+        "Azure OpenAI: 0 itens, 0 token-modelo",
+        "Cognitive Services: 0 itens, 0 token-modelo",
+        "Azure AI Foundry: 0 itens, 0 token-modelo"
+      ],
       "source": "https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/microsoft/",
       "asOf": "2026-06-22"
     },
