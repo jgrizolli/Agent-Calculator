@@ -91,12 +91,12 @@ FALLBACK = {
 # Mapeia o nome do medidor do Azure -> id do modelo na calculadora.
 # Ordem importa: os mais específicos (mini/nano) vêm antes dos genéricos.
 TOKEN_PATTERNS = [
-    ("gpt55",  r"gpt[\s-]?5\.5"),
-    ("gpt54m", r"gpt[\s-]?5\.4.*mini"),
-    ("gpt54n", r"gpt[\s-]?5\.4.*nano"),
-    ("gpt54",  r"gpt[\s-]?5\.4"),
-    ("gpt5m",  r"gpt[\s-]?5(?![.\d]).*mini"),
-    ("gpt5n",  r"gpt[\s-]?5(?![.\d]).*nano"),
+    ("gpt55",  r"(?:gpt[\s-]?)?5\.5"),
+    ("gpt54m", r"(?:gpt[\s-]?)?5\.4.*(?:mini|\bmn\b)"),
+    ("gpt54n", r"(?:gpt[\s-]?)?5\.4.*nano"),
+    ("gpt54",  r"(?:gpt[\s-]?)?5\.4"),
+    ("gpt5m",  r"(?:gpt[\s-]?)?5(?![.\d]).*(?:mini|\bmn\b)"),
+    ("gpt5n",  r"(?:gpt[\s-]?)?5(?![.\d]).*nano"),
     ("gpt5",   r"gpt[\s-]?5(?![.\d])"),
     ("gpt41m", r"gpt[\s-]?4\.1.*mini"),
     ("gpt41n", r"gpt[\s-]?4\.1.*nano"),
@@ -128,11 +128,11 @@ def _per_million(price, uom):
 
 def _component(meter):
     m = meter.lower()
-    if "cache" in m:
+    if "cache" in m or "cchd" in m or re.search(r"\bcd\b.*\b(inp|input|inpt)\b", m):
         return "cached"
-    if "output" in m or re.search(r"\boutp", m):
+    if "output" in m or re.search(r"\b(outp|outpt|opt)\b", m):
         return "out"
-    if "input" in m or re.search(r"\binp", m):
+    if "input" in m or re.search(r"\b(inp|inpt)\b", m):
         return "in"
     return "in"
 
@@ -146,17 +146,18 @@ def _match_model_id(meter):
 
 
 # Nomes de servico candidatos onde os precos de token podem estar.
-# A Microsoft ja hospedou os medidores do Azure OpenAI sob nomes diferentes,
-# entao tentamos varios e usamos o primeiro que retornar medidores de token.
-SERVICE_CANDIDATES = ["Azure OpenAI", "Cognitive Services", "Azure AI Foundry"]
+# A API atual hospeda Azure OpenAI em "Foundry Models"; os demais ficam como
+# fallback historico caso a Microsoft reorganize os medidores novamente.
+SERVICE_CANDIDATES = ["Foundry Models", "Azure OpenAI", "Cognitive Services", "Azure AI Foundry"]
 
 
 def _scope_rank(meter):
     """Prioriza precos 'Global' sobre 'Regional'/'Data Zone'."""
     m = meter.lower()
-    if "glbl" in m or "global" in m:
+    if "glbl" in m or "global" in m or re.search(r"\bgl\b", m):
         return 2
-    if "regional" in m or "data zone" in m or "-dz" in m or " dz" in m:
+    if ("regional" in m or "regnl" in m or "rgnl" in m or "data zone" in m
+            or re.search(r"\b(dz|dzn|dzone)\b", m)):
         return 0
     return 1
 
@@ -166,6 +167,10 @@ def _fetch_service(sname):
     # transforma em %24filter e a API do Azure devolve 0 itens. Por isso
     # montamos a URL manualmente e codificamos apenas o VALOR do filtro.
     flt = "serviceName eq '{}' and priceType eq 'Consumption'".format(sname.replace("'", "''"))
+    if sname == "Foundry Models":
+        # Foundry Models tem milhares de medidores duplicados por regiao. Uma
+        # regiao fixa evita rate limit (429) e mantem medidores globais/regionais.
+        flt += " and contains(productName, 'Azure OpenAI') and armRegionName eq 'eastus'"
     url = ("https://prices.azure.com/api/retail/prices"
            "?api-version=2023-01-01-preview"
            "&$filter=" + urllib.parse.quote(flt))
@@ -188,6 +193,17 @@ def _is_token_meter(it):
             or "1,000" in uom or "1000" in uom)
 
 
+def _is_standard_text_meter(it):
+    text = "{} {}".format(it.get("productName") or "", it.get("meterName") or "").lower()
+    blocked = [
+        "batch", "fine", "-ft", " ft ", "grader", "media", "realtime",
+        " rt ", " aud", "audio", " img", "image", "transcribe", "tts",
+        "sora", "code-interpreter", "file-search", " pro ", " pp ",
+        "provisioned", "longco", "shortco", "codex", "chat-latest",
+    ]
+    return not any(b in text for b in blocked)
+
+
 def fetch_tokens():
     chosen, used, total = [], [], 0
     for sname in SERVICE_CANDIDATES:
@@ -197,7 +213,9 @@ def fetch_tokens():
             used.append("{}: erro {}".format(sname, exc))
             continue
         toks = [it for it in got
-                if _is_token_meter(it) and _match_model_id(it.get("meterName") or "")]
+                if _is_token_meter(it)
+                and _is_standard_text_meter(it)
+                and _match_model_id(it.get("meterName") or "")]
         used.append("{}: {} itens, {} token-modelo".format(sname, len(got), len(toks)))
         if toks:
             chosen, total = toks, len(got)
