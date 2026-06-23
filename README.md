@@ -1,6 +1,6 @@
-# 🧮 Calculadora de Créditos & Tokens — IA da Microsoft
+# 🧮 Calculadora de Créditos & Tokens IA da Microsoft
 
-Calculadora estática (1 arquivo HTML) para estimar o custo **diário, semanal, mensal e anual** de:
+Calculadora  para estimar o custo **diário, semanal, mensal e anual** de:
 
 - **Microsoft 365 Copilot** (licença por usuário)
 - **Copilot Cowork** (licença + créditos por uso)
@@ -17,7 +17,7 @@ Tudo em **US$ ou R$**, com preços **editáveis** e **atualização automática 
 ```
 .
 ├─ index.html                          # a calculadora (é a página do site)
-├─ prices.json                         # preços atuais (gerado/atualizado pelo robô)
+├─ prices.json                         # preços atuais (gerado/atualizado GH)
 ├─ README.md                           # este guia
 ├─ scripts/
 │  ├─ update_prices.py                 # busca os preços e regenera o prices.json
