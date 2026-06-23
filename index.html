@@ -434,7 +434,7 @@
           </table>
           <div class="row" style="margin-top:14px">
             <div class="field">
-              <label for="sre-aau" data-i18n="sre_aau_label">US$ por AAU (informe para ver em moeda)</label>
+              <label for="sre-aau" data-i18n="sre_aau_label">US$ por AAU (automático, editável)</label>
               <input type="number" id="sre-aau" min="0" step="0.001" data-i18n-ph="sre_aau_ph" placeholder="ex.: 0,10">
             </div>
           </div>
@@ -582,8 +582,8 @@ const T = {
     sre_lede:"O SRE Agent (e outros agentes prontos do Azure) cobra em AAUs: um custo fixo de base de 4 AAUs por agente por hora, mais o consumo variável conforme os tokens usados em cada tarefa.",
     sre_agents:"Nº de agentes", sre_hours:"Horas provisionadas/dia", sre_model:"Modelo (define taxas AAU)",
     sre_h3:"Tarefas por dia (por conjunto de agentes)", sre_th_type:"Tipo de tarefa", sre_th_aautask:"AAUs/tarefa", sre_th_qtyday:"Qtd/dia", sre_th_aauday:"AAUs/dia",
-    sre_aau_label:"US$ por AAU (informe para ver em moeda)", sre_aau_ph:"ex.: 0,10",
-    sre_note:"<strong>Sobre o preço do AAU:</strong> a documentação da Microsoft define o <em>consumo</em> em AAUs (valores embutidos aqui são oficiais), mas o valor em US$ por AAU deve ser confirmado na Calculadora de Preços do Azure para a sua região. Informe-o acima para converter AAUs em moeda; sem isso, a calculadora mostra o consumo em AAUs (a unidade realmente faturada).",
+    sre_aau_label:"US$ por AAU (automático, editável)", sre_aau_ph:"ex.: 0,10",
+    sre_note:"<strong>Sobre o preço do AAU:</strong> a calculadora carrega automaticamente o preço público do medidor <em>SRE Agent Unit</em> no prices.json (região eastus por padrão). Você pode editar o campo se quiser simular outra região ou contrato.",
     src_sre:'Fonte: <a href="https://learn.microsoft.com/en-us/azure/sre-agent/pricing-billing" target="_blank" rel="noopener">Pricing and billing do Azure SRE Agent</a>',
     sret_quick:"Pergunta rápida (cerca de 37K tokens)", sret_investig:"Investigação de incidente (cerca de 415K)", sret_remediation:"Remediação completa (cerca de 1,04M)",
     rt_h2:"Tabela de preços dos modelos Foundry (US$/1M tokens)",
@@ -593,7 +593,7 @@ const T = {
     rt_h2_aau:"Taxas AAU do SRE Agent (AAUs/1M tokens)", rt_aau_th_cr:"Cache leitura", rt_aau_th_cw:"Cache escrita",
     src_aau:'Fonte: <a href="https://learn.microsoft.com/en-us/azure/sre-agent/pricing-billing" target="_blank" rel="noopener">Taxas AAU do Azure SRE Agent</a>',
     sum_h2:"Resumo de custos", sum_monthly:"Custo mensal estimado", sum_perBizDay:"Por dia útil", sum_perWeek:"Por semana", sum_perYear:"Por ano",
-    sum_note:"Soma todos os produtos ativos. Edite os campos em cada aba e o resumo recalcula em tempo real. O <strong>SRE Agent</strong> entra no total em US$ apenas se você informar o valor de US$ por AAU.",
+    sum_note:"Soma todos os produtos ativos. Edite os campos em cada aba e o resumo recalcula em tempo real. O <strong>SRE Agent</strong> entra no total em US$ quando o preço por AAU é carregado ou informado.",
     sum_products:"Produtos incluídos",
     chart_h2:"Custo mensal por produto", chart_hint:"Passe o mouse para destacar",
     footer:"Calculadora de referência. Preços coletados em junho de 2026 e sujeitos a alteração; sempre confirme na página de preços do produto.<br>Arquivo único e estático, abra localmente ou publique no GitHub Pages.",
@@ -662,8 +662,8 @@ const T = {
     sre_lede:"The SRE Agent (and other prebuilt Azure agents) bills in AAUs: a fixed baseline cost of 4 AAUs per agent per hour, plus variable usage based on the tokens consumed per task.",
     sre_agents:"Number of agents", sre_hours:"Provisioned hours/day", sre_model:"Model (sets AAU rates)",
     sre_h3:"Tasks per day (per agent set)", sre_th_type:"Task type", sre_th_aautask:"AAUs/task", sre_th_qtyday:"Qty/day", sre_th_aauday:"AAUs/day",
-    sre_aau_label:"US$ per AAU (enter to see currency)", sre_aau_ph:"e.g. 0.10",
-    sre_note:"<strong>About the AAU price:</strong> Microsoft's docs define the <em>consumption</em> in AAUs (values embedded here are official), but the US$ per AAU must be confirmed in the Azure Pricing Calculator for your region. Enter it above to convert AAUs to currency; without it, the calculator shows AAU consumption (the unit that is actually billed).",
+    sre_aau_label:"US$ per AAU (automatic, editable)", sre_aau_ph:"e.g. 0.10",
+    sre_note:"<strong>About the AAU price:</strong> the calculator automatically loads the public <em>SRE Agent Unit</em> meter price from prices.json (eastus by default). You can edit the field to simulate another region or contract.",
     src_sre:'Source: <a href="https://learn.microsoft.com/en-us/azure/sre-agent/pricing-billing" target="_blank" rel="noopener">Azure SRE Agent pricing and billing</a>',
     sret_quick:"Quick question (about 37K tokens)", sret_investig:"Incident investigation (about 415K)", sret_remediation:"Full remediation (about 1.04M)",
     rt_h2:"Price table for Foundry models (US$/1M tokens)",
@@ -673,7 +673,7 @@ const T = {
     rt_h2_aau:"SRE Agent AAU rates (AAUs/1M tokens)", rt_aau_th_cr:"Cache read", rt_aau_th_cw:"Cache write",
     src_aau:'Source: <a href="https://learn.microsoft.com/en-us/azure/sre-agent/pricing-billing" target="_blank" rel="noopener">Azure SRE Agent AAU rates</a>',
     sum_h2:"Cost summary", sum_monthly:"Estimated monthly cost", sum_perBizDay:"Per business day", sum_perWeek:"Per week", sum_perYear:"Per year",
-    sum_note:"Adds up all active products. Edit the fields in each tab and the summary recalculates in real time. The <strong>SRE Agent</strong> joins the US$ total only if you enter the US$ per AAU.",
+    sum_note:"Adds up all active products. Edit the fields in each tab and the summary recalculates in real time. The <strong>SRE Agent</strong> joins the US$ total when the AAU price is loaded or entered.",
     sum_products:"Included products",
     chart_h2:"Monthly cost by product", chart_hint:"Hover to highlight",
     footer:"Reference calculator. Prices collected in June 2026 and subject to change; always confirm on the product's pricing page.<br>Single static file, open locally or publish on GitHub Pages.",
@@ -747,6 +747,7 @@ const DEFAULTS = {
     {id:"toolp",    credit:100,qty:0},
     {id:"content",  credit:8,  qty:0}
   ],
+  aauPrice:0.10,
   aauRates:{
     opus46:{in:100, out:500, cr:10, cw:125},
     gpt53: {in:35,  out:280, cr:3.5, cw:0},
@@ -784,7 +785,7 @@ function mergeDefaults(saved){
     cowork:{users:1,license:30,inclLicense:true,tasks:6,profile:"medium",credits:40,creditPrice:0.01,model:"Claude Opus 4.8"},
     studio:{conv:500,creditPrice:0.01,licensed:false,qty:{}},
     foundry:{model:"gpt41",calls:200,inTok:4000,cached:0,outTok:800},
-    sre:{agents:1,hours:24,model:"opus46",aau:"",qty:{}},
+    sre:{agents:1,hours:24,model:"opus46",aau:0.10,qty:{}},
     lastPrice:null,
     fx:DEFAULTS.fx,currency:"USD",daysWeek:5,daysMonth:22,
     enabled:{m365:true,cowork:true,studio:true,foundry:true,sre:true}
@@ -1188,6 +1189,10 @@ function mergeModelsById(list){
 function applyPrices(j){
   if(Array.isArray(j.models)) mergeModelsById(j.models);
   if(j.aauRates) Object.keys(j.aauRates).forEach(k=>{ if(S.aauRates[k]) Object.assign(S.aauRates[k], j.aauRates[k]); });
+  if(typeof j.aauPrice==="number"){
+    S.aauPrice=j.aauPrice;
+    if(S.ui.sre.aau==="" || Number(S.ui.sre.aau)===0 || Number(S.ui.sre.aau)===Number(DEFAULTS.aauPrice)) S.ui.sre.aau=j.aauPrice;
+  }
   if(typeof j.creditPrice==="number"){ S.creditPrice=j.creditPrice; S.ui.cowork.creditPrice=j.creditPrice; S.ui.studio.creditPrice=j.creditPrice; }
   if(j.capacityPack) Object.assign(S.capacityPack, j.capacityPack);
   if(typeof j.sreAlwaysOn==="number") S.sreAlwaysOn=j.sreAlwaysOn;
@@ -1199,6 +1204,7 @@ function applyPrices(j){
 function hydratePricesFields(){
   $("#cw-creditprice").value=S.ui.cowork.creditPrice;
   $("#st-creditprice").value=S.ui.studio.creditPrice;
+  $("#sre-aau").value=S.ui.sre.aau;
   if(S.m365Prices){ const pr=S.m365Prices[S.ui.m365.plan]; if(pr!=null){ S.ui.m365.price=pr; $("#m365-price").value=pr; } }
 }
 async function fetchPrices(auto){

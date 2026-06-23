@@ -6,8 +6,9 @@ Gera o arquivo prices.json consumido pela calculadora.
 Fontes:
   1) Tokens (Azure OpenAI / Foundry) -> API pública de Preços de Varejo do Azure (JSON, confiável)
   2) Taxas AAU (SRE Agent)           -> página Microsoft Learn (HTML, raspagem)
-  3) Créditos (Copilot Studio)       -> página Microsoft Learn (HTML, raspagem)
-  4) Preço do crédito / licenças M365 -> melhor esforço; fallback nos valores oficiais
+  3) Preço US$/AAU (SRE Agent)       -> API pública de Preços de Varejo do Azure
+  4) Créditos (Copilot Studio)       -> página Microsoft Learn (HTML, raspagem)
+  5) Preço do crédito / licenças M365 -> melhor esforço; fallback nos valores oficiais
 
 Filosofia: nunca quebrar. Cada fonte roda em try/except; se falhar,
 mantém o valor oficial de referência (FALLBACK) e registra o status em meta[].
@@ -42,6 +43,7 @@ SRC_M365 = "https://www.microsoft.com/en-us/microsoft-365-copilot/pricing"
 # ---------------------------------------------------------------------------
 FALLBACK = {
     "creditPrice": 0.01,
+    "aauPrice": 0.10,
     "capacityPack": {"usd": 200, "credits": 25000},
     "sreAlwaysOn": 4,
     "m365": {"enterprise": 30, "business": 18},
@@ -284,7 +286,25 @@ def fetch_aau():
 
 
 # ---------------------------------------------------------------------------
-# 3) Créditos — página de billing do Copilot Studio
+# 3) Preço US$/AAU — API de Preços de Varejo do Azure
+# ---------------------------------------------------------------------------
+def fetch_aau_price(region="eastus"):
+    flt = ("serviceName eq 'Foundry Tools' and productName eq 'Azure Agent Unit' "
+           "and meterName eq 'SRE Agent Unit' and priceType eq 'Consumption' "
+           "and armRegionName eq '{}'").format(region.replace("'", "''"))
+    url = ("https://prices.azure.com/api/retail/prices"
+           "?api-version=2023-01-01-preview"
+           "&$filter=" + urllib.parse.quote(flt))
+    items = http_get(url).json().get("Items", [])
+    for it in items:
+        price = it.get("retailPrice")
+        if price is not None:
+            return float(price), region
+    return None, region
+
+
+# ---------------------------------------------------------------------------
+# 4) Créditos — página de billing do Copilot Studio
 # ---------------------------------------------------------------------------
 CREDIT_PATTERNS = {
     "classic":   r"classic answer[\s\S]{0,40}?(\d+(?:\.\d+)?)\s*copilot credit",
@@ -308,7 +328,7 @@ def fetch_credits():
 
 
 # ---------------------------------------------------------------------------
-# 4) Preço do crédito (melhor esforço)
+# 5) Preço do crédito (melhor esforço)
 # ---------------------------------------------------------------------------
 def fetch_credit_price():
     text = http_get(SRC_CREDITPRICE).text.lower()
@@ -359,7 +379,21 @@ def main():
     except Exception as exc:
         meta["aau"] = {"status": "fallback", "error": str(exc), "source": SRC_AAU, "asOf": TODAY}
 
-    # 3) créditos (Studio)
+    # 3) preço US$/AAU (SRE Agent)
+    try:
+        ap, region = fetch_aau_price()
+        if ap:
+            out["aauPrice"] = ap
+            meta["aauPrice"] = {
+                "status": "live", "value": ap, "region": region,
+                "source": "Azure Retail Prices API", "asOf": TODAY,
+            }
+        else:
+            meta["aauPrice"] = {"status": "fallback", "source": "Azure Retail Prices API", "asOf": TODAY}
+    except Exception as exc:
+        meta["aauPrice"] = {"status": "fallback", "error": str(exc), "source": "Azure Retail Prices API", "asOf": TODAY}
+
+    # 4) créditos (Studio)
     try:
         credits = fetch_credits()
         if credits:
@@ -373,7 +407,7 @@ def main():
     except Exception as exc:
         meta["credits"] = {"status": "fallback", "error": str(exc), "source": SRC_CREDITS, "asOf": TODAY}
 
-    # 4) preço do crédito
+    # 5) preço do crédito
     try:
         cp = fetch_credit_price()
         if cp:
