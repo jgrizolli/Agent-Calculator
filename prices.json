@@ -28,7 +28,7 @@
       "id": "gpt54m",
       "name": "GPT-5.4 mini",
       "in": 0.75,
-      "cached": 0.08,
+      "cached": 0.075,
       "out": 4.5
     },
     {
@@ -83,23 +83,23 @@
     {
       "id": "gpt4o",
       "name": "GPT-4o",
-      "in": 2.5,
+      "in": 5.0,
       "cached": 1.25,
-      "out": 10.0
+      "out": 15.0
     },
     {
       "id": "gpt4om",
       "name": "GPT-4o mini",
-      "in": 0.15,
-      "cached": 0.075,
-      "out": 0.6
+      "in": 10.0,
+      "cached": 0.3,
+      "out": 2.4
     },
     {
       "id": "o3",
       "name": "o3",
-      "in": 2.0,
-      "cached": 0.5,
-      "out": 8.0
+      "in": 20.0,
+      "cached": 2.5,
+      "out": 80.0
     },
     {
       "id": "o4m",
@@ -119,7 +119,7 @@
       "id": "o1",
       "name": "o1",
       "in": 15.0,
-      "cached": 7.5,
+      "cached": 0.55,
       "out": 60.0
     },
     {
@@ -230,21 +230,19 @@
       "credit": 8.0
     }
   ],
-  "asOf": "2026-06-22",
+  "asOf": "2026-06-23",
   "generatedBy": "github-action",
   "currency": "USD",
   "meta": {
     "tokens": {
-      "status": "fallback",
-      "matched": 0,
-      "meters": 0,
+      "status": "live",
+      "matched": 15,
+      "meters": 985,
       "services": [
-        "Azure OpenAI: 0 itens, 0 token-modelo",
-        "Cognitive Services: 0 itens, 0 token-modelo",
-        "Azure AI Foundry: 0 itens, 0 token-modelo"
+        "Foundry Models: 985 itens, 256 token-modelo"
       ],
       "source": "https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/microsoft/",
-      "asOf": "2026-06-22"
+      "asOf": "2026-06-23"
     },
     "aau": {
       "status": "live",
@@ -254,7 +252,7 @@
         "gpt52"
       ],
       "source": "https://learn.microsoft.com/en-us/azure/sre-agent/pricing-billing",
-      "asOf": "2026-06-22"
+      "asOf": "2026-06-23"
     },
     "credits": {
       "status": "live",
@@ -266,18 +264,18 @@
         "content"
       ],
       "source": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/requirements-messages-management",
-      "asOf": "2026-06-22"
+      "asOf": "2026-06-23"
     },
     "creditPrice": {
       "status": "live",
       "value": 0.01,
       "source": "https://azure.microsoft.com/en-us/pricing/details/copilot-studio/",
-      "asOf": "2026-06-22"
+      "asOf": "2026-06-23"
     },
     "m365": {
       "status": "fallback",
       "source": "https://www.microsoft.com/en-us/microsoft-365-copilot/pricing",
-      "asOf": "2026-06-22",
+      "asOf": "2026-06-23",
       "note": "Pagina de marketing (JS); valores oficiais mantidos. Edite aqui se a Microsoft alterar."
     }
   }
