@@ -1,5 +1,6 @@
 {
   "creditPrice": 0.01,
+  "aauPrice": 0.1,
   "capacityPack": {
     "usd": 200,
     "credits": 25000
@@ -252,6 +253,13 @@
         "gpt52"
       ],
       "source": "https://learn.microsoft.com/en-us/azure/sre-agent/pricing-billing",
+      "asOf": "2026-06-23"
+    },
+    "aauPrice": {
+      "status": "live",
+      "value": 0.1,
+      "region": "eastus",
+      "source": "Azure Retail Prices API",
       "asOf": "2026-06-23"
     },
     "credits": {
