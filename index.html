@@ -765,12 +765,17 @@ const DEFAULTS = {
 /* ============================================================
    Estado da tela
    ============================================================ */
-const LS_KEY = "msAiCalc.v1";
+const LS_KEY = "msAiCalc.v2";
 let S = load();
 
 function load(){
-  try{ localStorage.removeItem(LS_KEY); }catch(e){}
-  return mergeDefaults({});
+  try{
+    localStorage.removeItem("msAiCalc.v1");
+    localStorage.removeItem(LS_KEY);
+  }catch(e){}
+  const s = mergeDefaults({});
+  resetUsage(s);
+  return s;
 }
 function mergeDefaults(saved){
   const s = JSON.parse(JSON.stringify(DEFAULTS));
@@ -792,6 +797,23 @@ function mergeDefaults(saved){
   return s;
 }
 function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({models:S.models,aauRates:S.aauRates,ui:S.ui})); }catch(e){} }
+
+function resetUsage(state){
+  const s = state || S;
+  if(!s || !s.ui) return;
+  s.ui.m365.users = 0;
+  s.ui.cowork.users = 0;
+  s.ui.cowork.tasks = 0;
+  s.ui.studio.conv = 0;
+  Object.keys(s.ui.studio.qty || {}).forEach(k=>{ s.ui.studio.qty[k] = 0; });
+  s.ui.foundry.calls = 0;
+  s.ui.foundry.inTok = 0;
+  s.ui.foundry.cached = 0;
+  s.ui.foundry.outTok = 0;
+  s.ui.sre.agents = 0;
+  s.ui.sre.hours = 0;
+  Object.keys(s.ui.sre.qty || {}).forEach(k=>{ s.ui.sre.qty[k] = 0; });
+}
 
 /* ============================================================
    Helpers
@@ -1103,6 +1125,7 @@ function setPath(path,val){
    Hydrate
    ============================================================ */
 function hydrate(){
+  resetUsage();
   $("#currency").value=S.ui.currency;
   $("#fx").value=S.ui.fx;
   $("#daysWeek").value=S.ui.daysWeek;
@@ -1212,6 +1235,7 @@ async function fetchPrices(auto){
     if(!r.ok) throw new Error("HTTP "+r.status);
     const j=await r.json();
     applyPrices(j);
+    resetUsage();
     S.ui.lastPrice={when:Date.now(), asOf:j.asOf||null, by:j.generatedBy||null}; save();
     buildRateTable(); buildAauTable(); buildStudioTable(); buildModelSelect();
     $("#fd-model").value=S.ui.foundry.model; hydratePricesFields(); renderAll();
@@ -1248,8 +1272,9 @@ $$("#langSeg button").forEach(b=>b.addEventListener("click",()=>{ S.ui.lang=b.da
 $("#btnFx").addEventListener("click",()=>fetchFx(false));
 $("#btnReload").addEventListener("click",()=>fetchPrices(false));
 $("#btnReset").addEventListener("click",()=>{
-  try{ localStorage.removeItem(LS_KEY); }catch(e){}
+  try{ localStorage.removeItem("msAiCalc.v1"); localStorage.removeItem(LS_KEY); }catch(e){}
   S=mergeDefaults({});
+  resetUsage();
   buildAll(); hydrate(); applyLang();
   fetchPrices(true);
 });
