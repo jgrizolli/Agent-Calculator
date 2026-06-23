@@ -248,7 +248,7 @@
             </div>
             <div class="field">
               <label for="m365-users" data-i18n="m365_users">Nº de usuários</label>
-              <input type="number" id="m365-users" min="0" step="1" value="1">
+              <input type="number" id="m365-users" min="0" step="1" value="0">
             </div>
             <div class="field">
               <label for="m365-price" data-i18n="m365_price">Preço/usuário/mês (US$)</label>
@@ -273,7 +273,7 @@
           <div class="row">
             <div class="field">
               <label for="cw-users" data-i18n="cw_users">Usuários com Cowork</label>
-              <input type="number" id="cw-users" min="0" step="1" value="1">
+              <input type="number" id="cw-users" min="0" step="1" value="0">
             </div>
             <div class="field">
               <label for="cw-license" data-i18n="cw_license">Licença M365 Copilot/usuário/mês (US$)</label>
@@ -288,7 +288,7 @@
           <div class="row">
             <div class="field">
               <label for="cw-tasks" data-i18n="cw_tasks">Tarefas/usuário/dia útil</label>
-              <input type="number" id="cw-tasks" min="0" step="0.5" value="6">
+              <input type="number" id="cw-tasks" min="0" step="0.5" value="0">
             </div>
             <div class="field">
               <label for="cw-profile" data-i18n="cw_profile">Complexidade média</label>
@@ -337,7 +337,7 @@
           <div class="row">
             <div class="field">
               <label for="st-conv" data-i18n="st_conv">Interações/dia</label>
-              <input type="number" id="st-conv" min="0" step="1" value="500">
+              <input type="number" id="st-conv" min="0" step="1" value="0">
             </div>
             <div class="field">
               <label for="st-creditprice" data-i18n="st_creditprice">Preço/crédito (US$)</label>
@@ -376,13 +376,13 @@
             </div>
             <div class="field">
               <label for="fd-calls" data-i18n="fd_calls">Chamadas/dia útil</label>
-              <input type="number" id="fd-calls" min="0" step="1" value="200">
+              <input type="number" id="fd-calls" min="0" step="1" value="0">
             </div>
           </div>
           <div class="row">
             <div class="field">
               <label for="fd-in" data-i18n="fd_in">Tokens de entrada/chamada</label>
-              <input type="number" id="fd-in" min="0" step="100" value="4000">
+              <input type="number" id="fd-in" min="0" step="100" value="0">
             </div>
             <div class="field">
               <label for="fd-cached" data-i18n="fd_cached">Tokens em cache/chamada</label>
@@ -390,7 +390,7 @@
             </div>
             <div class="field">
               <label for="fd-out" data-i18n="fd_out">Tokens de saída/chamada</label>
-              <input type="number" id="fd-out" min="0" step="100" value="800">
+              <input type="number" id="fd-out" min="0" step="100" value="0">
             </div>
           </div>
           <table id="fd-detail"><thead><tr><th data-i18n="fd_th_comp">Componente</th><th class="num" data-i18n="fd_th_tokday">Tokens/dia</th><th class="num" data-i18n="fd_th_per1m">US$/1M</th><th class="num" data-i18n="fd_th_costday">Custo/dia (US$)</th></tr></thead><tbody></tbody></table>
@@ -412,11 +412,11 @@
           <div class="row">
             <div class="field">
               <label for="sre-agents" data-i18n="sre_agents">Nº de agentes</label>
-              <input type="number" id="sre-agents" min="0" step="1" value="1">
+              <input type="number" id="sre-agents" min="0" step="1" value="0">
             </div>
             <div class="field">
               <label for="sre-hours" data-i18n="sre_hours">Horas provisionadas/dia</label>
-              <input type="number" id="sre-hours" min="0" max="24" step="1" value="24">
+              <input type="number" id="sre-hours" min="0" max="24" step="1" value="0">
             </div>
             <div class="field">
               <label for="sre-model" data-i18n="sre_model">Modelo (define taxas AAU)</label>
@@ -617,7 +617,7 @@ const T = {
     tut_step5:"<b>Ajuste os preços</b>Na aba Tabela de preços você edita Token e AAU manualmente.",
     tut_local_h:"💻 Rodando local", tut_local_b:"Dê duplo clique no <code>index.html</code>: funciona offline com os valores embutidos, e você edita Token e AAU à mão. Para ler o <code>prices.json</code>, rode <code>python -m http.server</code>.",
     tut_cloud_h:"☁️ No GitHub Pages", tut_cloud_b:"Publicada no GitHub Pages, os preços são atualizados automaticamente uma vez por mês.",
-    tut_tip:"<strong>Dica:</strong> tudo que você digita fica salvo no seu navegador. Use <em>Restaurar padrões</em> para zerar.",
+    tut_tip:"<strong>Dica:</strong> a calculadora sempre abre zerada. Use <em>Restaurar padrões</em> para limpar os campos de uso novamente.",
     tut_dontshow:"Não mostrar automaticamente", tut_gotit:"Entendi, começar!"
   },
   en:{
@@ -697,7 +697,7 @@ const T = {
     tut_step5:"<b>Adjust prices</b>In the Price table tab you can edit Token and AAU values by hand.",
     tut_local_h:"💻 Running locally", tut_local_b:"Double click <code>index.html</code>: it works offline with the embedded values, and you edit Token and AAU by hand. To read <code>prices.json</code>, run <code>python -m http.server</code>.",
     tut_cloud_h:"☁️ On GitHub Pages", tut_cloud_b:"Published on GitHub Pages, prices are updated automatically once a month.",
-    tut_tip:"<strong>Tip:</strong> everything you type is saved in your browser. Use <em>Reset defaults</em> to start over.",
+    tut_tip:"<strong>Tip:</strong> the calculator always opens cleared. Use <em>Reset defaults</em> to clear usage fields again.",
     tut_dontshow:"Don't show automatically", tut_gotit:"Got it, let's start!"
   }
 };
@@ -738,8 +738,8 @@ const DEFAULTS = {
   ],
   studioFeatures:[
     {id:"classic",  credit:1,  qty:0},
-    {id:"genative", credit:2,  qty:1},
-    {id:"action",   credit:5,  qty:1},
+    {id:"genative", credit:2,  qty:0},
+    {id:"action",   credit:5,  qty:0},
     {id:"grounding",credit:10, qty:0},
     {id:"flow",     credit:13, qty:0},
     {id:"toolb",    credit:1,  qty:0},
@@ -755,24 +755,21 @@ const DEFAULTS = {
   },
   sreAlwaysOn:4,
   sreTaskTokens:{
-    quick:      {in:20000,  out:2000,  cr:15000,  cw:5000,  qty:5},
-    investig:   {in:200000, out:15000, cr:150000, cw:50000, qty:1},
+    quick:      {in:20000,  out:2000,  cr:15000,  cw:5000,  qty:0},
+    investig:   {in:200000, out:15000, cr:150000, cw:50000, qty:0},
     remediation:{in:500000, out:40000, cr:400000, cw:100000,qty:0}
   },
   coworkProfiles:{light:12, medium:40, heavy:120}
 };
 
 /* ============================================================
-   Estado (persistido em localStorage)
+   Estado da tela
    ============================================================ */
 const LS_KEY = "msAiCalc.v1";
 let S = load();
 
 function load(){
-  try{
-    const raw = localStorage.getItem(LS_KEY);
-    if(raw){ return mergeDefaults(JSON.parse(raw)); }
-  }catch(e){}
+  try{ localStorage.removeItem(LS_KEY); }catch(e){}
   return mergeDefaults({});
 }
 function mergeDefaults(saved){
@@ -781,11 +778,11 @@ function mergeDefaults(saved){
   if(saved.aauRates) Object.assign(s.aauRates, saved.aauRates);
   s.ui = Object.assign({
     lang:"pt", tab:"m365",
-    m365:{plan:"enterprise",users:1,price:30},
-    cowork:{users:1,license:30,inclLicense:true,tasks:6,profile:"medium",credits:40,creditPrice:0.01,model:"Claude Opus 4.8"},
-    studio:{conv:500,creditPrice:0.01,licensed:false,qty:{}},
-    foundry:{model:"gpt41",calls:200,inTok:4000,cached:0,outTok:800},
-    sre:{agents:1,hours:24,model:"opus46",aau:0.10,qty:{}},
+    m365:{plan:"enterprise",users:0,price:30},
+    cowork:{users:0,license:30,inclLicense:true,tasks:0,profile:"medium",credits:40,creditPrice:0.01,model:"Claude Opus 4.8"},
+    studio:{conv:0,creditPrice:0.01,licensed:false,qty:{}},
+    foundry:{model:"gpt41",calls:0,inTok:0,cached:0,outTok:0},
+    sre:{agents:0,hours:0,model:"opus46",aau:0.10,qty:{}},
     lastPrice:null,
     fx:DEFAULTS.fx,currency:"USD",daysWeek:5,daysMonth:22,
     enabled:{m365:true,cowork:true,studio:true,foundry:true,sre:true}
@@ -1254,6 +1251,7 @@ $("#btnReset").addEventListener("click",()=>{
   try{ localStorage.removeItem(LS_KEY); }catch(e){}
   S=mergeDefaults({});
   buildAll(); hydrate(); applyLang();
+  fetchPrices(true);
 });
 $("#btnHelp").addEventListener("click",openTut);
 $("#tutClose").addEventListener("click",closeTut);
