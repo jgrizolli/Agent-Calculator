@@ -231,7 +231,7 @@
       "credit": 8.0
     }
   ],
-  "asOf": "2026-06-23",
+  "asOf": "2026-07-01",
   "generatedBy": "github-action",
   "currency": "USD",
   "meta": {
@@ -243,7 +243,7 @@
         "Foundry Models: 985 itens, 256 token-modelo"
       ],
       "source": "https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/microsoft/",
-      "asOf": "2026-06-23"
+      "asOf": "2026-07-01"
     },
     "aau": {
       "status": "live",
@@ -253,14 +253,14 @@
         "gpt52"
       ],
       "source": "https://learn.microsoft.com/en-us/azure/sre-agent/pricing-billing",
-      "asOf": "2026-06-23"
+      "asOf": "2026-07-01"
     },
     "aauPrice": {
       "status": "live",
       "value": 0.1,
       "region": "eastus",
       "source": "Azure Retail Prices API",
-      "asOf": "2026-06-23"
+      "asOf": "2026-07-01"
     },
     "credits": {
       "status": "live",
@@ -272,18 +272,18 @@
         "content"
       ],
       "source": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/requirements-messages-management",
-      "asOf": "2026-06-23"
+      "asOf": "2026-07-01"
     },
     "creditPrice": {
       "status": "live",
       "value": 0.01,
       "source": "https://azure.microsoft.com/en-us/pricing/details/copilot-studio/",
-      "asOf": "2026-06-23"
+      "asOf": "2026-07-01"
     },
     "m365": {
       "status": "fallback",
       "source": "https://www.microsoft.com/en-us/microsoft-365-copilot/pricing",
-      "asOf": "2026-06-23",
+      "asOf": "2026-07-01",
       "note": "Pagina de marketing (JS); valores oficiais mantidos. Edite aqui se a Microsoft alterar."
     }
   }
